@@ -4,9 +4,28 @@ import socket
 import threading
 from queue import Queue
 
-target = input("Ange IP-adress at skanna: ")
+target = ""
 queue = Queue()
 open_ports = []
+
+def meny():
+    print("What do you want to scan:")
+    print("1. Your own PC(local host)")
+    print("2. Your router")
+    print("3. Enter you own IP-address")
+    print("4. Try a specific port")
+    print("5. End the program")
+
+    while True:
+        try:
+            choice = int(input("choose (1-5): "))
+            if 1 <= choice <= 5:
+                return choice
+            else:
+                print("Choose between 1 och 5")
+        except:
+            print("Enter a number")
+
 
 def portscan(port):
     try:
