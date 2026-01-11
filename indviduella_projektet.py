@@ -4,9 +4,6 @@ import socket
 import threading
 from queue import Queue
 
-target = ""
-queue = Queue()
-open_ports = []
 
 def meny():
     print("What do you want to scan:")
