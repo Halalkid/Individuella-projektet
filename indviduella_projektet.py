@@ -27,38 +27,42 @@ def meny():
             print("Enter a number")
 
 
-def portscan(port):
-    try:
-        s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s1.connect((target, port))
-        return True
-    except:
-        return False
+def scan_target(ip, start_port=1, end_port=1024):
+    """Kör port scanning på en IP"""
+    queue = Queue()
+    open_ports = []
+    
+    def portscan(port):
+        try:
+            s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s1.settimeout(0.5)
+            result = s1.connect_ex((ip, port))
+            s1.close()
+            return result == 0
+        except:
+            return False
+    
+    def worker():
+        while not queue.empty():
+            port = queue.get()
+            if portscan(port):
+                print(f"  Port {port}")
+                open_ports.append(port)
+            queue.task_done()
 
-def fill_queue(port_list):
-    for port in port_list:
+    # Fyll kön
+    for port in range(start_port, end_port + 1):
         queue.put(port)
-
-def worker():
-    while not queue.empty():
-        port = queue.get()
-        if portscan(port):
-                print("Port{} is open!".format(port))
-                open_port.append(port)
-
-port_list = range(1, 1024)
-fill_queue(port_list)
-
-thread_list = []
-
-for i in range(100):
-    thread = threading.Thread(target=worker)
-    thread_list.append(thread)
-
-for thread in thread_list:
-    thread.start()
-
-for thread in thread_list:
-    thread.join()
-
-print("Open ports are: ", open_ports)
+    
+    # Starta trådar
+    threads = []
+    for i in range(min(100, (end_port - start_port + 1))):
+        t = threading.Thread(target=worker)
+        t.daemon = True
+        t.start()
+        threads.append(t)
+    
+    # Vänta
+    queue.join()
+    
+    return open_ports
