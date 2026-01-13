@@ -4,14 +4,20 @@ import socket
 import threading
 from queue import Queue
 
-def log():
-    logging.basicConfig(level= logging.INFO, filename ="port_scanner.log", filemode= "a",
+def setup_logging():
+
+    logging.basicConfig(level= logging.INFO, filename = "port_scanner.log", filemode= "a",
                         format = "%(asctime)s -  %(levelname)s - %(message)s")
 
-logging.info("info")
-logging.warning("warning")
-logging.error("error")
-logging.critical("critical")
+    logging.info("PORT SCANNER INITIALIZING ")
+
+    return "port_scanner.log"
+
+
+
+
+
+
 
 def meny():  
     print("What do you want to scan:")
