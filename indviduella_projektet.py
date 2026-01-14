@@ -4,14 +4,39 @@ import socket
 import threading
 from queue import Queue
 
-def log():
-    logging.basicConfig(level= logging.INFO, filename ="port_scanner.log", filemode= "a",
+def setup_logging():
+
+    logging.basicConfig(level= logging.INFO, filename = "port_scanner.log", filemode= "a",
                         format = "%(asctime)s -  %(levelname)s - %(message)s")
 
-logging.info("info")
-logging.warning("warning")
-logging.error("error")
-logging.critical("critical")
+    logging.info("PORT SCANNER INITIALIZING ")
+
+    return "port_scanner.log"
+
+def e_control():
+    print("\n [*] RUNNING ENVIRONMENT CHECKS ....")
+    logging.info("RUNNING ENVIRONMENT")
+    
+    python_v = sys.version_info
+
+    if python_v < (3, 6):
+        error_msg = f"Python 3.6+ required. Your version: {sys.version}"
+        logging.error(error_msg)
+        print("[-] ERROR: ", error_msg)
+        return False
+
+    print("[+]  PYTHON VERSION COMPATIBLE: ", sys.version.split()[0])
+    logging.info(f"PYTHON VERSION:  {sys.version}")
+    return True         
+
+
+
+
+
+
+
+
+
 
 def meny():  
     print("What do you want to scan:")
